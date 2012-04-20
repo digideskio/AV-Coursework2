@@ -37,7 +37,7 @@ n = 3;
 k = 100;
 t = 0.01;
 dmin = 10000;
-dmax = 20000;
+dmax = 16000;
 
 iterations = 1;
 best_error =  100000000;

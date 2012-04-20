@@ -1,4 +1,4 @@
-function [ all_points ] = growRegion( frame, starting_point )
+function [ bwimage ] = growRegion( frame, starting_point )
 %GROWREGION Summary of this function goes here
 %   Detailed explanation goes here
 xyz = reshape(frame(:,1:3), 640, 480, 3);
@@ -63,7 +63,7 @@ while size(queue, 1)
     end
 end
 
-figure,imshow(bwimage);
+%figure,imshow(bwimage);
 
 % C = corner(bwimage, 'MinimumEigenValue');
 % 
@@ -92,6 +92,7 @@ for i=1:numel(visited)/5
     end
 end
 
+bwimage = imopen(bwimage, strel('disk',7));
 figure,imshow(bwimage);
 
 end

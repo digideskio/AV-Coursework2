@@ -39,6 +39,9 @@ P=esthomog(UV,XY,4);
 background = imread('field.jpg', 'jpg');
 [IR,IC,D]=size(background);
 
+%mvp keen esthomog values
+XY2=[[1,400]', [1,1]', [225,1]', [225,400]']';
+
 for i=15:25
     frame = sprintf('xyzrgb_frame_00%i', i);
     eval(sprintf('current_frame = %s;', frame));
@@ -84,7 +87,70 @@ for i=15:25
     averagex = round(totalx / (numel(consensus_set)/2));
     averagey = round(totaly / (numel(consensus_set)/2));
     
-    growRegion(current_frame, [averagex, averagey]);
+    %Grow the region and find the rectangle
+    plane = growRegion(current_frame, [averagex, averagey]);
+    
+    %Find corners of the rectangle
+    top = [0, 0];
+    left = [0, 0];
+    right = [0, 0];
+    bottom = [0, 0];
+    tmost = 1000000;
+    bmost = 0;
+    lmost = 1000000;
+    rmost = 0;
+    
+    for r=1:480
+    for c=1:640
+        if plane(r,c) == 1
+            if r > bmost
+                bottom = [r, c];
+                bmost = r;
+            end
+            if r < tmost
+                top = [r, c];
+                tmost = r;
+            end
+            if c > rmost
+                right = [r, c];
+                rmost = c;
+            end
+            if c < lmost
+                left = [r, c];
+                lmost = c;
+            end
+        end
+    end
+    end
+    
+    corners = [];
+    %Figure out orientation of rectangle
+    if left(2) > right(2)
+        corners = [left, top, right, bottom];
+    else
+        corners = [top, right, bottom, left];
+    end
+    
+    %mvpkeen esthomog
+    mvpkeen = imread(sprintf('mvpkeen/mvpkeen_%i.gif', i-1));
+    mvpkeen = flipdim(mvpkeen, 2);
+    [IR2,IC2,D2]=size(mvpkeen);
+    UV2=[corners(1:2)', corners(3:4)', corners(5:6)', corners(7:8)']';
+
+    P2=esthomog(UV2,XY2,4);
+    
+    %insert mvp keen
+    for r=1:480
+    for c=1:640
+        v = P2*[r,c,1]';
+        y=round(v(1)/v(3));
+        x=round(v(2)/v(3));
+
+        if (x >= 1) & (x <= IC2) & (y >= 1) & (y <= IR2)
+            image(r,c,:) = double(mvpkeen(y,x,:)) / 255.0;
+        end
+    end
+    end
 
     figure,imshow(image);
 end
