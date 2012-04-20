@@ -35,7 +35,7 @@ XY=[[1,338]', [1,1]', [450,1]', [450,338]']';
 P=esthomog(UV,XY,4);
 
 
-%iterate over all frames, insert background
+%iterate over all frames
 background = imread('field.jpg', 'jpg');
 [IR,IC,D]=size(background);
 
@@ -47,7 +47,7 @@ for i=15:25
     current_xyz = flipdim(imrotate(current_xyz, -90), 2);
     image = getImage(current_frame); %Iterate frames here, replace this line
 
-    %loop over frame image
+    %loop over frame image to insert background
     for r=1:480
     for c=1:640
         v = P*[r,c,1]';
@@ -69,6 +69,22 @@ for i=15:25
         end
     end
     end
+    
+    %Find rectangular plane
+    [plane, fit_error, consensus_set] = getPlane(current_frame);
+    
+    %Find center of consensus set to get a starting point to grow region
+    totalx = 0;
+    totaly = 0;
+    for p=1:numel(consensus_set)/2
+
+        totalx = totalx + consensus_set(p,1);
+        totaly = totaly + consensus_set(p,2);
+    end
+    averagex = round(totalx / (numel(consensus_set)/2));
+    averagey = round(totaly / (numel(consensus_set)/2));
+    
+    growRegion(current_frame, [averagex, averagey]);
 
     figure,imshow(image);
 end
