@@ -45,7 +45,7 @@ XY2=[[1,400]', [1,1]', [225,1]', [225,400]']';
 
 %Prepare to write video
 vw = VideoWriter('AV_movie.avi');
-vw.FrameRate = 6;
+vw.FrameRate = 5;
 vw.open();
 
 for i=15:25
@@ -54,7 +54,7 @@ for i=15:25
     
     current_xyz = reshape(current_frame(:,1:3), 640, 480, 3);
     current_xyz = flipdim(imrotate(current_xyz, -90), 2);
-    image = getImage(current_frame); %Iterate frames here, replace this line
+    image = getImage(current_frame);
 
     %loop over frame image to insert background
     for r=1:480
@@ -121,8 +121,8 @@ for i=15:25
     end
     end
 
-    imshow(image);
-    writeVideo(vw,getframe(gcf));
+    %figure,imshow(image);
+    writeVideo(vw,image);
 end
 
 
