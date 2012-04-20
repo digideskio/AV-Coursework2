@@ -45,13 +45,15 @@ function [ corners ] = findCorners( plane )
     bld = 0;
     brd = 0;
     
+    %Number of iterations of finding corners algorithm
+    n = 3;
+    
+    for i=1:n
     for r=1:480
     for c=1:640
         if plane(r,c) == 1
             %top-left quadrant
             if (c < center(2)) && (r < center(1))
-                c
-                bl(2)
                 distance = (r-tr(1))^2 + (c-tr(2))^2 + (r-bl(1))^2 + (c-bl(2))^2 + (r-br(1))^2 + (c-br(2))^2;
                 if distance > tld
                     tl = [r, c];
@@ -60,7 +62,7 @@ function [ corners ] = findCorners( plane )
             end
             
             %top-right quadrant
-            if c > center(2) && r < center(1)
+            if (c > center(2)) && (r < center(1))
                 distance = (r-tl(1))^2 + (c-tl(2))^2 + (r-bl(1))^2 + (c-bl(2))^2 + (r-br(1))^2 + (c-br(2))^2;
                 if distance > trd
                     tr = [r, c];
@@ -69,7 +71,7 @@ function [ corners ] = findCorners( plane )
             end
             
             %bottom-left quadrant
-            if c < center(2) && r > center(1)
+            if (c < center(2)) && (r > center(1))
                 distance = (r-tr(1))^2 + (c-tr(2))^2 + (r-tl(1))^2 + (c-tl(2))^2 + (r-br(1))^2 + (c-br(2))^2;
                 if distance > bld
                     bl = [r, c];
@@ -78,7 +80,7 @@ function [ corners ] = findCorners( plane )
             end
             
             %bottom-right quadrant
-            if c > center(2) && r > center(1)
+            if (c > center(2)) && (r > center(1))
                 distance = (r-tr(1))^2 + (c-tr(2))^2 + (r-bl(1))^2 + (c-bl(2))^2 + (r-tl(1))^2 + (c-tl(2))^2;
                 if distance > brd
                     br = [r, c];
@@ -88,8 +90,19 @@ function [ corners ] = findCorners( plane )
         end
     end
     end
+    end
     
-    corners = [tl', tr', br', bl']'
+    corners = [tl', tr', br', bl']';
+    
+%     figure,imshow(plane);
+%     
+%     bwimage = zeros(480, 640);
+%     bwimage(corners(1,1), corners(1,2)) = 1;
+%     bwimage(corners(2,1), corners(2,2)) = 1;
+%     bwimage(corners(3,1), corners(3,2)) = 1;
+%     bwimage(corners(4,1), corners(4,2)) = 1;
+%     
+%     figure,imshow(bwimage);
     
 end
 

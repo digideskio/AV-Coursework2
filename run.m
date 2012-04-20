@@ -42,6 +42,12 @@ background = imread('field.jpg', 'jpg');
 %mvp keen esthomog values
 XY2=[[1,400]', [1,1]', [225,1]', [225,400]']';
 
+
+%Prepare to write video
+vw = VideoWriter('AV_movie.avi');
+vw.FrameRate = 6;
+vw.open();
+
 for i=15:25
     frame = sprintf('xyzrgb_frame_00%i', i);
     eval(sprintf('current_frame = %s;', frame));
@@ -115,6 +121,9 @@ for i=15:25
     end
     end
 
-    figure,imshow(image);
+    imshow(image);
+    writeVideo(vw,getframe(gcf));
 end
 
+
+close(vw);

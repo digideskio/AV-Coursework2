@@ -93,7 +93,7 @@ for i=1:numel(visited)/5
 end
 
 bwimage = imopen(bwimage, strel('disk',4));
-figure,imshow(bwimage);
+%figure,imshow(bwimage);
 
 end
 
