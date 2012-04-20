@@ -32,7 +32,7 @@ while size(queue, 1)
             newx = ix + i;
             newy = iy + j;
             
-            if newx < 300
+            if newx < 280
                 continue;
             end
             
@@ -92,7 +92,7 @@ for i=1:numel(visited)/5
     end
 end
 
-bwimage = imopen(bwimage, strel('disk',7));
+bwimage = imopen(bwimage, strel('disk',4));
 figure,imshow(bwimage);
 
 end

@@ -90,52 +90,15 @@ for i=15:25
     %Grow the region and find the rectangle
     plane = growRegion(current_frame, [averagex, averagey]);
     
+    
     %Find corners of the rectangle
-    top = [0, 0];
-    left = [0, 0];
-    right = [0, 0];
-    bottom = [0, 0];
-    tmost = 1000000;
-    bmost = 0;
-    lmost = 1000000;
-    rmost = 0;
-    
-    for r=1:480
-    for c=1:640
-        if plane(r,c) == 1
-            if r > bmost
-                bottom = [r, c];
-                bmost = r;
-            end
-            if r < tmost
-                top = [r, c];
-                tmost = r;
-            end
-            if c > rmost
-                right = [r, c];
-                rmost = c;
-            end
-            if c < lmost
-                left = [r, c];
-                lmost = c;
-            end
-        end
-    end
-    end
-    
-    corners = [];
-    %Figure out orientation of rectangle
-    if left(2) > right(2)
-        corners = [left, top, right, bottom];
-    else
-        corners = [top, right, bottom, left];
-    end
+    corners = findCorners(plane);
     
     %mvpkeen esthomog
     mvpkeen = imread(sprintf('mvpkeen/mvpkeen_%i.gif', i-1));
     mvpkeen = flipdim(mvpkeen, 2);
     [IR2,IC2,D2]=size(mvpkeen);
-    UV2=[corners(1:2)', corners(3:4)', corners(5:6)', corners(7:8)']';
+    UV2=[corners(1,:)', corners(2,:)', corners(3,:)', corners(4,:)']';
 
     P2=esthomog(UV2,XY2,4);
     

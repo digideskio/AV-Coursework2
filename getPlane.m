@@ -19,7 +19,7 @@ for c=1:640
     blue = image(r,c,3);
     
     %threshold by colour, and ignore all values in top half of image
-    if (blue < 0.2) & (green < 0.2) & (red > 0) & (r > 300)
+    if (blue < 0.2) & (green < 0.2) & (red > 0) & (r > 280)
         bwimage(r,c) = 1;
         points = [points; [r,c]];
     else
