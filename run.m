@@ -43,12 +43,7 @@ background = imread('field.jpg', 'jpg');
 XY2=[[1,400]', [1,1]', [225,1]', [225,400]']';
 
 
-%Prepare to write video
-vw = VideoWriter('AV_movie.avi');
-vw.FrameRate = 5;
-vw.open();
-
-for i=15:25
+for i=24:24
     frame = sprintf('xyzrgb_frame_00%i', i);
     eval(sprintf('current_frame = %s;', frame));
     
@@ -122,8 +117,5 @@ for i=15:25
     end
 
     %figure,imshow(image);
-    writeVideo(vw,image);
+    imwrite(image, sprintf('frames/frame_%i.png', i));
 end
-
-
-close(vw);

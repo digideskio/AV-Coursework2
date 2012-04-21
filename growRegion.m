@@ -65,16 +65,6 @@ end
 
 %figure,imshow(bwimage);
 
-% C = corner(bwimage, 'MinimumEigenValue');
-% 
-% newbwimage = zeros(480, 640);
-% for i=1:numel(C)/2
-%     newbwimage(C(i,2), C(i,1)) = 1;
-% end
-% 
-% figure,imshow(newbwimage);
-
-
 
 %fit plane on region growing points
 threshold = 2;
@@ -91,9 +81,21 @@ for i=1:numel(visited)/5
         bwimage(ix, iy) = 0;
     end
 end
-
 bwimage = imopen(bwimage, strel('disk',4));
-%figure,imshow(bwimage);
+
+
+
+
+
+C = corner(bwimage, 'MinimumEigenValue');
+
+bwimage = zeros(480, 640);
+for i=1:numel(C)/2
+    bwimage(C(i,2), C(i,1)) = 1;
+end
+
+
+figure,imshow(bwimage);
 
 end
 

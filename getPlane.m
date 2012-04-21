@@ -35,8 +35,8 @@ end
 %RANSAC
 n = 3;
 k = 100;
-t = 0.01;
-dmin = 10000;
+t = 0.006;
+dmin = 9000;
 dmax = 16000;
 
 iterations = 1;
