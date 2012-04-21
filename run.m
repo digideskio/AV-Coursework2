@@ -43,7 +43,7 @@ background = imread('field.jpg', 'jpg');
 XY2=[[1,400]', [1,1]', [225,1]', [225,400]']';
 
 
-for i=24:24
+for i=15:25
     frame = sprintf('xyzrgb_frame_00%i', i);
     eval(sprintf('current_frame = %s;', frame));
     
@@ -73,6 +73,8 @@ for i=24:24
         end
     end
     end
+    
+    %imwrite(image, sprintf('background/%i.jpg', i));
     
     %Find rectangular plane
     [plane, fit_error, consensus_set] = getPlane(current_frame);
