@@ -1,6 +1,5 @@
 function [ bwimage ] = growRegion( frame, starting_point )
-%GROWREGION Summary of this function goes here
-%   Detailed explanation goes here
+
 xyz = reshape(frame(:,1:3), 640, 480, 3);
 xyz = flipdim(imrotate(xyz, -90), 2);
 
@@ -8,9 +7,11 @@ image = thresholdImage(getImage(frame));
 bwimage = zeros(480,640);
 
 
-%grow region here
+%queue of points to visit
 queue = [starting_point];
 bwimage(starting_point(1), starting_point(2)) = 1;
+
+%keep track of points added to region
 visited = [];
 
 threshold = 1;
@@ -62,11 +63,9 @@ while size(queue, 1)
         end
     end
 end
-
 %figure,imshow(bwimage);
 
-
-%fit plane on region growing points
+%fit plane on region growing points to filter out hand points
 threshold = 2;
 [plane, fit] = fitplane(visited(:,1:3));
 for i=1:numel(visited)/5
@@ -83,10 +82,10 @@ for i=1:numel(visited)/5
 end
 bwimage = imopen(bwimage, strel('disk',4));
 
-
-
-
-
+%use a matlab corner detection algorithm to just get the points on the
+%edges
+%this doesn't really affect the accuracy, but makes next step faster since
+%there are less points to check
 C = corner(bwimage, 'MinimumEigenValue');
 
 bwimage = zeros(480, 640);
@@ -94,8 +93,7 @@ for i=1:numel(C)/2
     bwimage(C(i,2), C(i,1)) = 1;
 end
 
-
-figure,imshow(bwimage);
+%figure,imshow(bwimage);
 
 end
 

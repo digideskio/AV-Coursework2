@@ -1,6 +1,4 @@
 function [ plane, error, consensus_set ] = getPlane( frame )
-%GETPLANE Summary of this function goes here
-%   Detailed explanation goes here
 
 image = getImage(frame);
 %figure,imshow(image);
@@ -29,7 +27,6 @@ end
 end
 
 %bwimage = imopen(bwimage, strel('disk',5));
-
 %figure,imshow(bwimage);
 
 %RANSAC
