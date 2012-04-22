@@ -14,13 +14,14 @@ P=esthomog(UV,XY,4);
 
 background = imread('field.jpg', 'jpg');
 [IR,IC,D]=size(background);
-background = flipdim(background, 2);
+%background = flipdim(background, 2);
 
 %mvpkeen esthomog values for our video
 XY2=[[1,400]', [1,1]', [225,1]', [225,400]']';
 
 %iterate over all frames
-for i=15:15
+for i=24:24
+    disp(sprintf('Frame %i', i));
     %load frame data
     frame = sprintf('xyzrgb_frame_00%i', i);
     eval(sprintf('current_frame = %s;', frame));
@@ -28,7 +29,9 @@ for i=15:15
     current_xyz = reshape(current_frame(:,1:3), 640, 480, 3);
     current_xyz = flipdim(imrotate(current_xyz, -90), 2);
     image = getImage(current_frame);
+%     figure,imshow(image);
 
+    disp('Background replacement...');
     %loop over frame image to insert background
     for r=1:480
     for c=1:640
@@ -47,15 +50,18 @@ for i=15:15
             continue;
         end
 
-        if (x >= 1) & (x <= IC) & (y >= 1) & (y <= IR) & (distance < 0.1)
+        if (x >= 1) & (x <= IC) & (y >= 1) & (y <= IR) & (distance < 0.01)
             image(r,c,:) = double(background(y,x,:)) / 255.0;
         end
     end
     end
     
+%     figure,imshow(image);
+    
     %imwrite(image, sprintf('background/%i.jpg', i));
     
     %Find rectangular plane
+    disp('RANSAC...');
     [plane, fit_error, consensus_set] = getPlane(current_frame);
     
     %Find center of consensus set to get a starting point to grow region
@@ -70,9 +76,11 @@ for i=15:15
     averagey = round(totaly / (numel(consensus_set)/2));
     
     %Grow the region and find the rectangle
+    disp('Region growing...');
     plane = growRegion(current_frame, [averagex, averagey]);
     
     %Find corners of the rectangle
+    disp('Corner finding...');
     corners = findCorners(plane);
     
     %mvpkeen esthomog

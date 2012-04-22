@@ -9,7 +9,7 @@ for c=1:640
     blue = image(r,c,3);
     
     %threshold by colour, and ignore all values in top half of image
-    if (blue < 0.2) & (green < 0.2) & (red > 0) & (r > 280)
+    if (blue < 0.3) & (green < 0.3) & (red > 0) & (r > 280)
         bwimage(r,c) = 1;
     else
         bwimage(r,c) = 0;

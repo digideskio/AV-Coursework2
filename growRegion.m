@@ -80,7 +80,9 @@ for i=1:numel(visited)/5
         bwimage(ix, iy) = 0;
     end
 end
+
 bwimage = imopen(bwimage, strel('disk',4));
+%figure,imshow(bwimage);
 
 %use a matlab corner detection algorithm to just get the points on the
 %edges
